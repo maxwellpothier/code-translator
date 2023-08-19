@@ -1,21 +1,23 @@
 import {useState} from "react";
 import {translateCode} from "../utils/translateUtils";
 import {useForm} from "react-hook-form";
+import LanguageSelect from "@/components/LanguageSelect";
 
 // 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
 
 const Home = () => {
-	const hookForm = useForm();
-
-	const [apiKey, setApiKey] = useState<string>("");
-	const [model, setModel] = useState<string>("gpt-3.5-turbo");
-
-	console.log(apiKey);
+	const hookForm = useForm({
+		defaultValues: {
+			apiKey: "",
+			model: "gpt-3.5-turbo",
+			inputLanguage: "Python",
+		},
+	});
 
 	return (
 		<form
 			onSubmit={hookForm.handleSubmit(translateCode)}
-			className="flex flex-col items-center h-screen">
+			className="flex flex-col items-center h-screen px-4">
 			<h1 className="text-4xl mt-24 mb-5 text-center">
 				AI Code Translator
 			</h1>
@@ -25,11 +27,10 @@ const Home = () => {
 				placeholder="Enter API Key"
 				{...hookForm.register("apiKey", {required: true})}
 			/>
-			<div className="flex space-x-4">
+			<div className="flex space-x-4 mb-5">
 				<select
-					value={model}
 					className="h-[40px] w-[140px] rounded-md bg-[#1F2937] px-4 py-2 text-neutral-200"
-					onChange={e => setModel(e.target.value)}>
+					{...hookForm.register("model", {required: true})}>
 					<option value="gpt-3.5-turbo">GPT-3.5</option>
 					<option value="gpt-4">GPT-4</option>
 				</select>
@@ -39,6 +40,8 @@ const Home = () => {
 					Translate
 				</button>
 			</div>
+			<h3 className="text-center text-xl font-bold mb-3">Input</h3>
+			<LanguageSelect hookForm={hookForm} />
 		</form>
 	);
 };
