@@ -3,8 +3,6 @@ import {translateCode} from "../utils/translateUtils";
 import {useForm} from "react-hook-form";
 import LanguageSelect from "@/components/LanguageSelect";
 
-// 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
-
 const Home = () => {
 	const hookForm = useForm({
 		defaultValues: {
