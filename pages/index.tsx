@@ -6,7 +6,7 @@ import CodeBlock from "@/components/CodeBlock";
 import {ToastContainer, toast} from "react-toastify";
 import {toastError} from "@/utils/toastUtils";
 import {getPrompt} from "@/utils/translateUtils";
-import {getTranslatedCode} from "../utils/openAiApi";
+import {getTranslatedCode} from "../utils/translateUtils";
 import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
