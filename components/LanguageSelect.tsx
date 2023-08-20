@@ -3,13 +3,14 @@ import {languages} from "../data/languages";
 
 interface Props {
 	hookForm: any;
+	name: string;
 }
 
-const LanguageSelect: FC<Props> = ({hookForm}) => {
+const LanguageSelect: FC<Props> = ({hookForm, name}) => {
 	return (
 		<select
-			className="w-full rounded-md bg-[#1F2937] px-4 py-2 text-neutral-200"
-			{...hookForm.register("inputLanguage", {required: true})}>
+			className="w-full rounded-md bg-[#1F2937] px-4 py-2 text-neutral-200 mb-3"
+			{...hookForm.register(name, {required: true})}>
 			{languages
 				.sort((a, b) => a.label.localeCompare(b.label))
 				.map((language, index) => (
