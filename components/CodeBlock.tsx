@@ -5,18 +5,21 @@ import {go} from "@codemirror/legacy-modes/mode/go";
 import {tokyoNight} from "@uiw/codemirror-theme-tokyo-night";
 
 interface Props {
-	hookForm: any;
+	hookForm?: any;
+	outputCode?: string;
 }
 
-const CodeBlock: FC<Props> = ({hookForm}) => {
+const CodeBlock: FC<Props> = ({hookForm, outputCode}) => {
+	const value = hookForm?.getValues("inputCode") || outputCode;
+
 	return (
-		<div className="w-full">
+		<div className="w-full mb-5">
 			<CodeMirror
 				editable
 				minHeight="300px"
 				extensions={[StreamLanguage.define(go)]}
 				theme={tokyoNight}
-				value={hookForm.getValues("inputCode")}
+				value={value}
 				onChange={value => hookForm.setValue("inputCode", value)}
 			/>
 		</div>

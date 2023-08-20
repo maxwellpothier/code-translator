@@ -1,9 +1,12 @@
-import {useEffect, useState} from "react";
-import {translateCode} from "../utils/translateUtils";
-import {useForm} from "react-hook-form";
+import {useState} from "react";
+import {checkForErrors} from "../utils/translateUtils";
+import {set, useForm} from "react-hook-form";
 import LanguageSelect from "@/components/LanguageSelect";
 import CodeBlock from "@/components/CodeBlock";
-import {ToastContainer} from "react-toastify";
+import {ToastContainer, toast} from "react-toastify";
+import {toastError} from "@/utils/toastUtils";
+import {getPrompt} from "@/utils/translateUtils";
+import {getTranslatedCode} from "../utils/openAiApi";
 import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
@@ -16,10 +19,28 @@ const Home = () => {
 		},
 	});
 
+	const [outputCode, setOutputCode] = useState("");
+
+	const onSubmit = async (formData: any) => {
+		setOutputCode("");
+		try {
+			checkForErrors(formData);
+
+			await getTranslatedCode(
+				formData.apiKey,
+				formData.model,
+				getPrompt(formData),
+				setOutputCode
+			);
+		} catch (error: any) {
+			toastError(error.message);
+		}
+	};
+
 	return (
 		<>
 			<form
-				onSubmit={hookForm.handleSubmit(translateCode)}
+				onSubmit={hookForm.handleSubmit(onSubmit)}
 				className="flex flex-col items-center h-screen px-4">
 				<h1 className="text-4xl mt-24 mb-5 text-center">
 					AI Code Translator
@@ -50,6 +71,7 @@ const Home = () => {
 
 				<h3 className="text-center text-xl font-bold mb-3">Output</h3>
 				<LanguageSelect hookForm={hookForm} name={"outputLanguage"} />
+				<CodeBlock outputCode={outputCode} />
 			</form>
 			<ToastContainer />
 		</>

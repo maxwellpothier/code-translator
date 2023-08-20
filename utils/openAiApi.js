@@ -1,28 +1,24 @@
 import OpenAI from "openai";
 
-const getPrompt = ({inputLanguage, outputLanguage, inputCode}) => {
-	return "Are you working??";
-};
-
-export const getTranslatedCode = async formContent => {
+export const getTranslatedCode = async (apiKey, model, prompt, setCode) => {
 	const openai = new OpenAI({
-		apiKey: formContent.apiKey,
+		apiKey: apiKey,
 		dangerouslyAllowBrowser: true,
 	});
 
 	try {
-		console.log("Loading...");
 		const response = await openai.chat.completions.create({
-			model: formContent.model,
-			messages: [{role: "system", content: getPrompt(formContent)}],
+			model: model,
+			messages: [{role: "system", content: prompt}],
 			temperature: 0,
 			stream: true,
 		});
 
-		console.log(response);
+		for await (const chunk of response) {
+			if (chunk.choices[0].delta.content === undefined) return;
+			setCode(prev => prev + chunk.choices[0].delta.content);
+		}
 	} catch (error) {
-		console.log(error);
-	} finally {
-		console.log("Done");
+		throw new Error(error);
 	}
 };
