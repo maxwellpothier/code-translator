@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import endent from "endent";
 
 export const checkForErrors = formContent => {
 	const {apiKey, model, inputLanguage, inputCode, outputLanguage} =
@@ -22,7 +23,25 @@ export const checkForErrors = formContent => {
 };
 
 export const getPrompt = ({inputLanguage, outputLanguage, inputCode}) => {
-	return "Write a multi-line poem";
+	return endent`
+      You are an expert programmer in all programming languages. Translate the "${inputLanguage}" code to "${outputLanguage}" code. Do not include \`\`\`.
+  
+      Example translating from JavaScript to Python:
+  
+      JavaScript code:
+      for (let i = 0; i < 10; i++) {
+        console.log(i);
+      }
+  
+      Python code:
+      for i in range(10):
+        print(i)
+      
+      ${inputLanguage} code:
+      ${inputCode}
+
+      ${outputLanguage} code (no \`\`\`):
+     `;
 };
 
 export const getTranslatedCode = async (apiKey, model, prompt, setCode) => {
