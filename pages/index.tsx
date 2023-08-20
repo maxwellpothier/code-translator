@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {checkForErrors} from "../utils/translateUtils";
 import {set, useForm} from "react-hook-form";
 import LanguageSelect from "@/components/LanguageSelect";
@@ -20,6 +20,13 @@ const Home = () => {
 	});
 
 	const [outputCode, setOutputCode] = useState("");
+
+	const inputLanguageValue = hookForm.watch("inputLanguage");
+
+	useEffect(() => {
+		hookForm.setValue("inputCode", "");
+		setOutputCode("");
+	}, [inputLanguageValue]);
 
 	const onSubmit = async (formData: any) => {
 		setOutputCode("");
@@ -65,13 +72,29 @@ const Home = () => {
 					</button>
 				</div>
 
-				<h3 className="text-center text-xl font-bold mb-3">Input</h3>
-				<LanguageSelect hookForm={hookForm} name={"inputLanguage"} />
-				<CodeBlock hookForm={hookForm} />
+				<div className="w-full flex flex-col lg:flex-row">
+					<div className="w-full lg:w-1/2 lg:px-2">
+						<h3 className="text-center text-xl font-bold mb-3">
+							Input
+						</h3>
+						<LanguageSelect
+							hookForm={hookForm}
+							name={"inputLanguage"}
+						/>
+						<CodeBlock hookForm={hookForm} />
+					</div>
 
-				<h3 className="text-center text-xl font-bold mb-3">Output</h3>
-				<LanguageSelect hookForm={hookForm} name={"outputLanguage"} />
-				<CodeBlock outputCode={outputCode} />
+					<div className="w-full lg:w-1/2 lg:px-2">
+						<h3 className="text-center text-xl font-bold mb-3">
+							Output
+						</h3>
+						<LanguageSelect
+							hookForm={hookForm}
+							name={"outputLanguage"}
+						/>
+						<CodeBlock outputCode={outputCode} />
+					</div>
+				</div>
 			</form>
 			<ToastContainer />
 		</>

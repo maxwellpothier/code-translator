@@ -16,7 +16,7 @@ const CodeBlock: FC<Props> = ({hookForm, outputCode}) => {
 		<div className="w-full mb-5">
 			<CodeMirror
 				editable
-				minHeight="300px"
+				minHeight="500px"
 				extensions={[StreamLanguage.define(go)]}
 				theme={tokyoNight}
 				value={value}
